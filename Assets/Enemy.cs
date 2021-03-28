@@ -3,24 +3,26 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    Health healthModify;
+    private Health healthModify;
+    private GameController gc;
+    private bool movement = true;
+    private Vector3 direction;
+    private Data data;
+    private int startSpeed;
+
     public int health;
     public int damage;
     public int speed;
-    GameController gc;
-    bool movement = true;
-    Vector3 direction;
-    Rigidbody rb;
 
-    // Start is called before the first frame update
     void Start()
     {
+        data = Resources.Load<Data>("Data");
         gc = GameObject.Find("GameController").GetComponent<GameController>();
         healthModify = GetComponent<Health>();
         direction = (new Vector3(0, 1.5f, 0) - transform.position).normalized;
+        //startSpeed = speed;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (health <= 0)
@@ -28,9 +30,7 @@ public class Enemy : MonoBehaviour
             gc.enemyCounter--;
             Destroy(gameObject);
         }
-        //Debug.Log("do");
     }
-
 
     private void OnDestroy()
     {
@@ -59,6 +59,13 @@ public class Enemy : MonoBehaviour
         if (trigger.gameObject.tag == "Projectile")
         {
             TakeDamage(trigger.gameObject.GetComponent<Projectile>().damage);
+            if (data.slow)
+            {
+                if (startSpeed == speed)
+                {
+                    StartCoroutine(Slow());
+                }
+            }
         }
     }
 
@@ -67,6 +74,7 @@ public class Enemy : MonoBehaviour
         health = setHealth;
         damage = setDamage;
         speed = setSpeed;
+        startSpeed = speed;
     }
 
     IEnumerator DoDamage(GameObject tower)
@@ -82,6 +90,20 @@ public class Enemy : MonoBehaviour
     {
         healthModify.ModifyHealth(-damage);
         health -= damage;
+    }
+
+    IEnumerator Slow()
+    {
+        speed -= 3;
+        float timer = 1;
+        timer -= Time.deltaTime;
+        Debug.Log(timer);
+        if (timer <= 0)
+        {
+            speed += 3;
+            yield break;
+        }
+        //yield return null;
     }
 
     void Move()

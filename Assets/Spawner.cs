@@ -32,7 +32,7 @@ public class Spawner : MonoBehaviour
                 SpawnEnemy(enemyType.pudge);
                 yield return new WaitForSeconds(1f);
             }
-        }            
+        }
     }
 
     (int gnoul, int pudge) GetEnemyCount(int waveNumber)
@@ -55,19 +55,19 @@ public class Spawner : MonoBehaviour
     }
 
     void SpawnEnemy(enemyType type)
-    {       
+    {
         gc.enemyCounter++;
         if (type == enemyType.ghoul)
         {
             GameObject newEnemy = Instantiate(enemies[0], null);
             newEnemy.transform.position = gameObject.transform.position;
-            newEnemy.GetComponent<Enemy>().SetParameters(8, 1, 13);
+            newEnemy.GetComponent<Enemy>().SetParameters(8, 1, Random.Range(12, 15));//13
         }
         else
         {
             GameObject newEnemy = Instantiate(enemies[1], null);
             newEnemy.transform.position = gameObject.transform.position;
-            newEnemy.GetComponent<Enemy>().SetParameters(17, 4, 7);
+            newEnemy.GetComponent<Enemy>().SetParameters(17, 4, Random.Range(6, 9));//7
         }
     }
 }

@@ -48,7 +48,7 @@ public class Archer : MonoBehaviour
         GameObject newProjectile = Instantiate(projectile);
         //newProjectile.GetComponent<Projectile>().damage = 5;
         newProjectile.transform.position = transform.position;
-        newProjectile.GetComponent<Projectile>().SetParameters(target, 50f, 5);
+        newProjectile.GetComponent<Projectile>().SetParameters(target, 50f, 1);
         //newProjectile.transform.LookAt(target);
         //SimpleCannonBall(target, 100f, newProjectile);
         //CannonBall(target, 10f, newProjectile);

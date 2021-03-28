@@ -2,44 +2,51 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
+
 
 public class GameController : MonoBehaviour
 {
     [SerializeField] Text towerHpText;
     [SerializeField] Text currWaveText;
     [SerializeField] Text enemiesToNextWave;
-    [SerializeField] Button nextWaveButton;
-
 
     [SerializeField] Tower tower;
     [SerializeField] Spawner[] spawners;
 
     public int currWave = 1;
     public int enemyCounter = 0;
+    public bool endWaveFlag = true;
 
-    // Start is called before the first frame update
+    public UnityAction endWave;
+    public UnityAction nextWave;
+
     void Start()
     {
+        nextWave += NextWave;
         enemyCounter = 0;
-        nextWaveButton.onClick.AddListener(NextWaveButton);
-        NextWave(currWave);        
+        NextWave();
     }
 
-    // Update is called once per frame
     void Update()
     {
         //Debug.Log(enemyCounter);
-        EndOfWave();        
+        if (enemyCounter == 0 && endWaveFlag)
+        {
+            currWave++;
+            endWave.Invoke();
+            endWaveFlag = false;
+        }
     }
 
     private void OnGUI()
     {
-        towerHpText.text = "HP: " + tower.GetTowerHp().ToString();
+        towerHpText.text = "Tower HP: " + tower.GetTowerHp().ToString();
         currWaveText.text = "Wave: " + currWave.ToString();
         enemiesToNextWave.text = "Enemies until the next wave: " + enemyCounter.ToString();
     }
 
-    void NextWave(int nextWave)
+    void SpawnNextWave(int nextWave)
     {
         foreach (Spawner _spawner in spawners)
         {
@@ -47,18 +54,9 @@ public class GameController : MonoBehaviour
         }
     }
 
-    void NextWaveButton()
+    void NextWave()
     {
-        currWave++;
-        NextWave(currWave);
-    }
-
-    void EndOfWave()
-    {
-        if (enemyCounter == 0)
-        {
-            currWave++;
-            NextWave(currWave);
-        }
+        endWaveFlag = true;
+        SpawnNextWave(currWave);
     }
 }
