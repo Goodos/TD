@@ -7,7 +7,7 @@ public class Health : MonoBehaviour
 {
     [SerializeField] int maxHealth = 100;
 
-    int currentHealth;
+    private int currentHealth;
 
     public event Action<float> OnHealthPctChanged = delegate { };
 

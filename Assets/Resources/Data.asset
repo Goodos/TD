@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb906e96bd330274798f046f53bf8143, type: 3}
   m_Name: Data
   m_EditorClassIdentifier: 
-  slow: 1
-  fire: 0
-  multyShot: 0
-  crit: 0
-  fireRate: 0
-  oneShoot: 0
+  slow: 0
+  slowdown: 3
+  health: 5
+  damage: 5
+  critDamage: 1
+  fireRate: 1

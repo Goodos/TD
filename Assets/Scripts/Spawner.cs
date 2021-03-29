@@ -5,6 +5,7 @@ public class Spawner : MonoBehaviour
 {
     [SerializeField] GameObject[] enemies;
     [SerializeField] GameController gc;
+
     enum enemyType
     {
         ghoul,

@@ -7,10 +7,7 @@ using UnityEngine.Events;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] Text towerHpText;
-    [SerializeField] Text currWaveText;
-    [SerializeField] Text enemiesToNextWave;
-
+    [SerializeField] RectTransform gameOverPanel;
     [SerializeField] Tower tower;
     [SerializeField] Spawner[] spawners;
 
@@ -23,6 +20,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        gameOverPanel.gameObject.SetActive(false);
         nextWave += NextWave;
         enemyCounter = 0;
         NextWave();
@@ -30,20 +28,17 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log(enemyCounter);
         if (enemyCounter == 0 && endWaveFlag)
         {
             currWave++;
             endWave.Invoke();
             endWaveFlag = false;
         }
-    }
-
-    private void OnGUI()
-    {
-        towerHpText.text = "Tower HP: " + tower.GetTowerHp().ToString();
-        currWaveText.text = "Wave: " + currWave.ToString();
-        enemiesToNextWave.text = "Enemies until the next wave: " + enemyCounter.ToString();
+        if (tower.GetTowerHp() <= 0)
+        {
+            Time.timeScale = 0;
+            gameOverPanel.gameObject.SetActive(true);
+        }
     }
 
     void SpawnNextWave(int nextWave)

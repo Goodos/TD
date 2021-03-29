@@ -5,20 +5,12 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public int damage;
-    Vector3 target;
-    float speed;
+    private Vector3 target;
+    private float speed;
 
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if (transform.position.y <= 2f)
+        if (transform.position.y <= -5f)
         {
             Destroy(gameObject);
         }
@@ -35,8 +27,6 @@ public class Projectile : MonoBehaviour
 
     void SimpleCannonBall()
     {
-        //Debug.Log("shoot");
-        //Vector3 direction = (target - transform.position).normalized;
-        transform.Translate(target * speed * Time.deltaTime);// = projectile.transform.position + direction * speed * Time.deltaTime;
+        transform.Translate(target * speed * Time.deltaTime);
     }    
 }

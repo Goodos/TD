@@ -20,7 +20,6 @@ public class Enemy : MonoBehaviour
         gc = GameObject.Find("GameController").GetComponent<GameController>();
         healthModify = GetComponent<Health>();
         direction = (new Vector3(0, 1.5f, 0) - transform.position).normalized;
-        //startSpeed = speed;
     }
 
     void Update()
@@ -59,6 +58,7 @@ public class Enemy : MonoBehaviour
         if (trigger.gameObject.tag == "Projectile")
         {
             TakeDamage(trigger.gameObject.GetComponent<Projectile>().damage);
+            Destroy(trigger.gameObject);
             if (data.slow)
             {
                 if (startSpeed == speed)
@@ -94,21 +94,21 @@ public class Enemy : MonoBehaviour
 
     IEnumerator Slow()
     {
-        speed -= 3;
-        float timer = 1;
-        timer -= Time.deltaTime;
-        Debug.Log(timer);
-        if (timer <= 0)
+        float timer = 2;
+        speed -= data.GetSlowdown();
+        while (timer > 0)
         {
-            speed += 3;
-            yield break;
+            timer -= Time.deltaTime;
+            if (timer <= 0)
+            {
+                speed += data.GetSlowdown(); 
+            }
+            yield return null;
         }
-        //yield return null;
     }
 
     void Move()
     {
         transform.position = transform.position + direction * speed * Time.deltaTime;
-        //rb.MovePosition(transform.position + direction * speed * Time.fixedDeltaTime);
     }
 }

@@ -3,28 +3,33 @@
 public class Archer : MonoBehaviour
 {
     [SerializeField] GameObject projectile;
-    Collider target;
-    bool CanShoot = false;
-    float fireRate = 1;
-    // Start is called before the first frame update
+    [SerializeField] GameController gameController;
+
+    private Collider target;
+    private float fireRate = 1;
+    private int damage = 5;
+    private int critDamage = 5;
+    private float timer;
+    private Data data;
+
     void Start()
     {
-        //Shoot();
+        data = Resources.Load<Data>("Data");
+        gameController.nextWave += CheckNewSkills;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (fireRate <= 0)
+        if (timer <= 0)
         {
             target = CheckColls();
             if (target != null)
             {
                 Shoot(target.transform.position);
             }
-            fireRate = 1;
+            timer = fireRate;
         }
-        fireRate -= Time.deltaTime;
+        timer -= Time.deltaTime;
     }
 
     Collider CheckColls()
@@ -46,18 +51,25 @@ public class Archer : MonoBehaviour
     void Shoot(Vector3 target)
     {
         GameObject newProjectile = Instantiate(projectile);
-        //newProjectile.GetComponent<Projectile>().damage = 5;
         newProjectile.transform.position = transform.position;
-        newProjectile.GetComponent<Projectile>().SetParameters(target, 50f, 1);
-        //newProjectile.transform.LookAt(target);
-        //SimpleCannonBall(target, 100f, newProjectile);
-        //CannonBall(target, 10f, newProjectile);
+        if (Random.Range(0,2) == 0)
+        {
+            damage *= critDamage;
+        }
+        newProjectile.GetComponent<Projectile>().SetParameters(target, 50f, damage);
+    }
+
+    void CheckNewSkills()
+    {
+        fireRate = data.GetFireRate();
+        damage = data.GetDamage();
+        critDamage = data.GetCritDamage();
     }
 
     void SimpleCannonBall(Vector3 target, float speed, GameObject projectile)
     {
         Vector3 direction = (target - projectile.transform.position).normalized;
-        projectile.transform.Translate(direction * speed * Time.deltaTime);// = projectile.transform.position + direction * speed * Time.deltaTime;
+        projectile.transform.Translate(direction * speed * Time.deltaTime);
     }
 
     void CannonBall(Vector3 target, float initialAngle, GameObject projectile)
